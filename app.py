@@ -7,7 +7,7 @@ import json
 
 app = Flask(__name__)
 
-app.config['MYSQL_HOST'] = 'db'
+app.config['MYSQL_HOST'] = '192.168.33.30'
 app.config['MYSQL_USER'] = 'example_user'
 app.config['MYSQL_PASSWORD'] = 'mysql'
 app.config['MYSQL_DB'] = 'example'
