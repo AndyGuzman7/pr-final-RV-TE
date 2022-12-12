@@ -33,7 +33,7 @@ def user_post_json():
     mysql.connection.commit()
     cursor2 = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
     cursor2.execute("SELECT LAST_INSERT_ID() as idUser")
-    data2 = cursor2.fetch()
+    data2 = cursor2.fetchone()
     resp = flask.Response(json.dumps(data2))
     resp.headers['Content-Type'] = 'application/json'
     return resp
@@ -43,7 +43,7 @@ def user_post_json():
 def userAllDetails_list_json():
     cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
     cursor.execute("SELECT u.idUser, u.nameUser, Date_format(u.create_at,'%d-%m-%Y') AS create_at, u.status, s.score FROM user u INNER JOIN score s ON s.user_iduser = u.idUser")
-    data = cursor.fetchone()
+    data = cursor.fetchall()
     resp = flask.Response(json.dumps(data))
     resp.headers['Content-Type'] = 'application/json'
     return resp
