@@ -32,7 +32,7 @@ def user_post_json():
                    (data['name_user']))
     mysql.connection.commit()
     cursor2 = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
-    cursor2.execute("SELECT LAST_INSERT_ID() as lastid")
+    cursor2.execute("SELECT LAST_INSERT_ID() as idUser")
     data2 = cursor2.fetchall()
     resp = flask.Response(json.dumps(data2))
     resp.headers['Content-Type'] = 'application/json'
