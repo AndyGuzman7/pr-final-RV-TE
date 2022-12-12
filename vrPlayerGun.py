@@ -47,7 +47,7 @@ def userAllDetails_list_json():
     return resp
 
 @app.route('/score', methods=['GET'])
-def user_list_json():
+def score_list_json():
     cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
     cursor.execute("SELECT * FROM score")
     data = cursor.fetchall()
