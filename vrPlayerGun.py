@@ -18,7 +18,7 @@ mysql = MySQL(app)
 @app.route('/users', methods=['GET'])
 def student_list_json():
     cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
-    cursor.execute("SELECT idUser, Date_format(create_at,'%Y/%M/%d'), status"); FROM user')
+    cursor.execute("SELECT idUser, Date_format(create_at,'%Y/%M/%d'), status FROM user")
     data = cursor.fetchall()
     resp = flask.Response(json.dumps(data))
     resp.headers['Content-Type'] = 'application/json'
