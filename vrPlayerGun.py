@@ -16,7 +16,7 @@ app.config['MYSQL_PORT'] = 3306
 mysql = MySQL(app)
 
 @app.route('/users', methods=['GET'])
-def student_list_json():
+def user_list_json():
     cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
     cursor.execute("SELECT idUser, Date_format(create_at,'%d-%m-%Y') AS create_at, status FROM user")
     data = cursor.fetchall()
@@ -25,7 +25,7 @@ def student_list_json():
     return resp
 
 @app.route('/users', methods=['POST'])
-def student_post_json():
+def user_post_json():
     cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
     data = request.json
     cursor.execute("INSERT INTO user (name_user, create_at, status) VALUES ('%s', 'current_timestamp()', '1')" % 
@@ -36,24 +36,35 @@ def student_post_json():
     resp.headers['Content-Type'] = 'application/json'
     return resp
 
-@app.route('/students', methods=['PUT'])
-def student_put_json():
+
+@app.route('/usersAllDetails', methods=['GET'])
+def userAllDetails_list_json():
+    cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
+    cursor.execute("SELECT u.idUser, u.nameUser, Date_format(u.create_at,'%d-%m-%Y') AS create_at, u.status, s.score FROM user u INNER JOIN score s ON s.user_iduser = u.idUser")
+    data = cursor.fetchall()
+    resp = flask.Response(json.dumps(data))
+    resp.headers['Content-Type'] = 'application/json'
+    return resp
+
+@app.route('/score', methods=['GET'])
+def user_list_json():
+    cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
+    cursor.execute("SELECT * FROM score")
+    data = cursor.fetchall()
+    resp = flask.Response(json.dumps(data))
+    resp.headers['Content-Type'] = 'application/json'
+    return resp
+
+@app.route('/score', methods=['POST'])
+def score_post_json():
     cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
     data = request.json
-    cursor.execute("UPDATE student SET first_name='%s', last_name='%s', city='%s', semester=%i WHERE id=%i" % 
-                   (data['first_name'], data['last_name'], data['city'], data['semester'], data['id']))
-    
+    cursor.execute("INSERT INTO score (user_iduser, score) VALUES ('%i', '%d')" % 
+                   (data['user_iduser'], data['score']))
     mysql.connection.commit()
     resp = flask.Response(json.dumps({'result': 'ok'}))
     resp.headers['Content-Type'] = 'application/json'
     return resp
-
-@app.route('/studentlist', methods=['GET'])
-def student_list():
-    cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
-    cursor.execute('SELECT * FROM student')
-    data = cursor.fetchall()
-    return render_template('list.html', students=data)
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=81, debug=True)
