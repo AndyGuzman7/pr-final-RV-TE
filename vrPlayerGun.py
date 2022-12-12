@@ -28,7 +28,7 @@ def user_list_json():
 def user_post_json():
     cursor = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
     data = request.json
-    cursor.execute("INSERT INTO user (nameUser, create_at, status) VALUES ('%s', 'current_timestamp()', '1')" % 
+    cursor.execute("INSERT INTO user (nameUsser, create_at, status) VALUES ('%s', current_timestamp(), 1)" % 
                    (data['name_user']))
     
     mysql.connection.commit()
