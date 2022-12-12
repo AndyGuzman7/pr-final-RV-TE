@@ -30,9 +30,11 @@ def user_post_json():
     data = request.json
     cursor.execute("INSERT INTO user (nameUser, create_at, status) VALUES ('%s', current_timestamp(), 1)" % 
                    (data['name_user']))
-    
     mysql.connection.commit()
-    resp = flask.Response(json.dumps({'result': 'ok'}))
+    cursor2 = mysql.connection.cursor(MySQLdb.cursors.DictCursor)
+    cursor2.execute("SELECT LAST_INSERT_ID() as lastid")
+    data2 = cursor2.fetchall()
+    resp = flask.Response(json.dumps(data2))
     resp.headers['Content-Type'] = 'application/json'
     return resp
 
